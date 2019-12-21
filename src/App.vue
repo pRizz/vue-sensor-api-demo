@@ -43,6 +43,7 @@ export default {
         this.accelerometer.addEventListener('reading', () => {
           this.accelerometerData = {...this.accelerometer}
         })
+        this.accelerometer.start()
       } catch(error) {
         this.accelerometerError = error
       }
