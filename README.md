@@ -1,5 +1,7 @@
 # vue-sensor-api-demo
 
+See demo at https://sensor-demo.prizzventuresllc.com/
+
 ## Project setup
 ```
 npm install
