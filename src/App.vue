@@ -18,13 +18,16 @@
         accelerometer: {{accelerometer}}
       </div>
       <div>
-        x: {{accelerometerData.x}}
+        accelerometerReadDate: {{accelerometerReadDate}}
       </div>
       <div>
-        y: {{accelerometerData.y}}
+        x: {{accelerometerX}}
       </div>
       <div>
-        z: {{accelerometerData.z}}
+        y: {{accelerometerY}}
+      </div>
+      <div>
+        z: {{accelerometerZ}}
       </div>
       <div>
         accelerometerError: {{accelerometerError}}
@@ -47,6 +50,10 @@ export default {
       permissionsError: null,
       accelerometer: null,
       accelerometerData: {},
+      accelerometerX: 0,
+      accelerometerY: 0,
+      accelerometerZ: 0,
+      accelerometerReadDate: null,
       accelerometerError: null,
     }
   },
@@ -59,6 +66,10 @@ export default {
         this.accelerometer = new Accelerometer({frequency: 10})
         this.accelerometer.addEventListener('reading', () => {
           this.accelerometerData = {...this.accelerometer}
+          this.accelerometerX = this.accelerometer.x
+          this.accelerometerY = this.accelerometer.y
+          this.accelerometerZ = this.accelerometer.z
+          this.accelerometerReadDate = new Date().toISOString()
           console.log(`${new Date().toISOString()}: got accelerometer reading: `, this.accelerometerData)
         })
         this.accelerometer.start()
