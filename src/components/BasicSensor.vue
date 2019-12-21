@@ -1,5 +1,5 @@
 <template>
-  <div style="border-radius: 10px; border: 1px solid gray; margin: 8px;">
+  <div style="border-radius: 10px; border: 1px solid gray; margin: 8px; padding: 8px">
     <h3>
       {{title}}
     </h3>
@@ -21,6 +21,15 @@
     <div>
       Sensor Error: {{sensorError}}
     </div>
+
+    <div>
+      Downward Vector
+    </div>
+    <svg viewBox="0 0 100 100" style="width: 100px; height: 100px;">
+      <circle r="50" cx="50" cy="50" fill="white" stroke="black" ></circle>
+      <line x1="50" y1="50" :x2="sensorVectorAtCircle.x" :y2="sensorVectorAtCircle.y" stroke="black"></line>
+    </svg>
+
   </div></template>
 
 <script>
@@ -37,7 +46,31 @@
         sensorError: null
       }
     },
+    computed: {
+      sensorVectorAtCircle() {
+        const normalized = this.sensorVectorNormalizedTo50()
+        normalized.x += 50
+        normalized.y += 50
+        normalized.z += 50
+        return normalized
+      }
+    },
     methods: {
+      sensorVectorNormalized() {
+        const magnitude = Math.hypot(this.x, this.y, this.z)
+        return {
+          x: this.x / magnitude,
+          y: this.y / magnitude,
+          z: this.z / magnitude
+        }
+      },
+      sensorVectorNormalizedTo50() {
+        const normalized = this.sensorVectorNormalized()
+        normalized.x *= 50
+        normalized.y *= 50
+        normalized.z *= 50
+        return normalized
+      },
       formatSensorDouble(double) {
         return double.toFixed(3)
       },
