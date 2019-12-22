@@ -18,7 +18,7 @@
     <div>
       z: {{z}}
     </div>
-    <div>
+    <div v-if="sensorError">
       Sensor Error: {{sensorError}}
     </div>
 
@@ -27,7 +27,8 @@
     </div>
     <svg viewBox="0 0 100 100" style="width: 100px; height: 100px;">
       <circle r="50" cx="50" cy="50" fill="white" stroke="black" ></circle>
-      <line x1="50" y1="50" :x2="sensorVectorAtCircle.x" :y2="sensorVectorAtCircle.y" stroke="black"></line>
+      <line x1="50" y1="50" :x2="sensorVectorAtCircle.x" :y2="sensorVectorAtCircle.y" stroke="green"></line>
+      <circle :r="arrowRadiusAtCircle" :cx="sensorVectorAtCircle.x" :cy="sensorVectorAtCircle.y" fill="green" />
     </svg>
 
   </div></template>
@@ -50,9 +51,13 @@
       sensorVectorAtCircle() {
         const normalized = this.sensorVectorNormalizedTo50()
         normalized.x += 50
+        normalized.y *= -1 // for svg coords
         normalized.y += 50
         normalized.z += 50
         return normalized
+      },
+      arrowRadiusAtCircle() {
+        return ((this.sensorVectorNormalized().z + 1) / 2) * 4 + 1
       }
     },
     methods: {
@@ -77,7 +82,7 @@
       initBasicSensor(SensorClass, referenceFrame = "screen") {
         try {
           this.sensor = new SensorClass({
-            frequency: 10,
+            frequency: 60,
             referenceFrame
           })
           this.sensor.addEventListener('reading', () => {
